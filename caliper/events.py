@@ -190,6 +190,14 @@ class GradeEvent(Event):
         ensure_type(self.object, ENTITY_TYPES["ATTEMPT"])
         ensure_type(self.generated, ENTITY_TYPES["SCORE"], optional=True)
 
+class JupyterEvent(Event):
+    def __init__(self, **kwargs):
+        Event.__init__(self, **kwargs)
+        ensure_type(self.actor, ENTITY_TYPES["PERSON"])
+        ensure_type(self.object, ENTITY_TYPES["SOFTWARE_APPLICATION"])
+        ensure_type(self.target, ENTITY_TYPES["SOFTWARE_APPLICATION"], optional=True)
+        ensure_type(self.generated, ENTITY_TYPES["AGGREGATE_MEASURE_COLLECTION"], optional=True)
+
 
 class MediaEvent(Event):
     def __init__(self, **kwargs):
