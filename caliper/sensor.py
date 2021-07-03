@@ -38,22 +38,26 @@ class Client(object):
 
         self._debug = []
 
-        if config_options is None:
-            config_options = Options()
-
-        if config_options and not (isinstance(config_options, Options)):
+        if not config_options:
+            self._config = Options()
+        elif isinstance(config_options, Options):
+            self._config = config_options
+        else:
             raise TypeError("config_options must implement base.Options")
-        self._config = config_options
 
-        if requestor and not (isinstance(requestor, EventStoreRequestor)):
-            raise TypeError("requestor must implement request.EventStoreRequestor")
-        else:
+        if not requestor:
             self._requestor = HttpRequestor(options=self._config)
-
-        if stats and not (isinstance(stats, Statistics)):
-            raise TypeError("stats must implement stats.Stats")
+        elif isinstance(requestor, EventStoreRequestor):
+            self._requestor = requestor
         else:
+            raise TypeError("requestor must implement request.EventStoreRequestor")
+
+        if not stats:
             self._stats = Statistics()
+        elif isinstance(stats, Statistics):
+            self._stats = stats
+        else:
+            raise TypeError("stats must implement stats.Stats")
 
     def _reset(self):
         self._stats = Statistics()
@@ -122,10 +126,10 @@ class SimpleSensor(object):
     def __init__(self, config_options=None, sensor_id=None):
         if not config_options:
             self._config = HttpOptions(optimize_serialization=True)
-        elif not (isinstance(config_options, HttpOptions)):
-            raise TypeError("config_options must implement HttpOptions")
-        else:
+        elif isinstance(config_options, HttpOptions):
             self._config = config_options
+        else:
+            raise TypeError("config_options must implement HttpOptions")
         self._id = sensor_id
         self._requestor = HttpRequestor(options=self._config)
         self._stats = SimpleStatistics()
