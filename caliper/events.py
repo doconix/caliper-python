@@ -343,5 +343,7 @@ class ViewEvent(Event):
                 self.object,
                 [ENTITY_TYPES["QUESTIONNAIRE"], ENTITY_TYPES["QUESTIONNAIRE_ITEM"]],
             )
+        elif self.profile == CALIPER_PROFILES["GRADING"]:
+            ensure_type(self.object, ENTITY_TYPES["RESULT"])
         else:
             ensure_type(self.object, ENTITY_TYPES["DIGITAL_RESOURCE"])
